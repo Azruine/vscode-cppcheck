@@ -1,7 +1,7 @@
 {
-  "name": "vscode-cppcheck",
+  "name": "vscode-cppcheck-forked",
   "publisher": "Azruine",
-  "displayName": "Cppcheck",
+  "displayName": "Cppcheck Forked",
   "description": "Run Cppcheck on your C and C++ code.",
   "version": "0.2.0",
   "engines": {
