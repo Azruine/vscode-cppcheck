@@ -1,11 +1,11 @@
 {
   "name": "vscode-cppcheck",
-  "publisher": "brobeson",
+  "publisher": "Azruine",
   "displayName": "Cppcheck",
   "description": "Run Cppcheck on your C and C++ code.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
-    "vscode": "^1.78.0"
+    "vscode": "^1.93.0"
   },
   "license": "MIT",
   "categories": [
@@ -22,22 +22,15 @@
     "onLanguage:c"
   ],
   "bugs": {
-    "url": "https://github.com/brobeson/vscode-cppcheck/issues"
+    "url": "https://github.com/Azruine/vscode-cppcheck/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/brobeson/vscode-cppcheck/"
+    "url": "https://github.com/Azruine/vscode-cppcheck/"
   },
-  "homepage": "https://github.com/brobeson/vscode-cppcheck/blob/main/README.md",
+  "homepage": "https://github.com/Azruine/vscode-cppcheck/blob/main/README.md",
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "cppcheck.scanProject",
-        "title": "Scan the Whole Project",
-        "category": "Cppcheck"
-      }
-    ],
     "configuration": {
       "title": "Cppcheck",
       "properties": {
@@ -62,19 +55,11 @@
           ],
           "default": "no elevation"
         },
-        "cppcheck.commandArguments": {
-          "deprecationMessage": "This setting will be removed in the future.",
-          "type": "array",
-          "markdownDescription": "Command line arguments to pass to Cppcheck. **WARNING** This extension removes some arguments from the list. For example, `--template` is removed because the extension requires a specific template to parse the output.",
-          "default": [
-            "--enable=all",
-            "--quiet",
-            "--project=../build/compile_commands.json"
-          ],
-          "additionalProperties": false,
-          "items": {
-            "type": "string"
-          }
+        "cppcheck.configFile": {
+          "description": "Path to a .cppcheck-config file containing command line arguments for Cppcheck. Each line in the file represents one argument.",
+          "type": "string",
+          "default": ".cppcheck-config",
+          "scope": "resource"
         }
       }
     }

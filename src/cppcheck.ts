@@ -1,6 +1,8 @@
 /* eslint-disable capitalized-comments,max-len */
 import { spawn } from "child_process";
 import * as vscode from "vscode";
+import * as fs from "fs";
+import * as path from "path";
 
 // import { readFileSync } from 'fs';
 
@@ -75,6 +77,43 @@ export function runCppcheck(
 }
 
 /**
+ * Add the template argument to the command arguments.
+ * @param commandArguments The array of command arguments to append to.
+ */
+function addTemplateArgument(commandArguments: string[]): void {
+  commandArguments.push('--template={|||file|||:|||{file}|||,|||line|||:{line},|||column|||:{column},|||severity|||:|||{severity}|||,|||message|||:|||{message}|||,|||id|||:|||{id}|||},');
+}
+
+/**
+ * Add the file argument to the command arguments if present.
+ * @param commandArguments The array of command arguments to append to.
+ * @param file The file to check, or undefined if not checking a specific file.
+ */
+function addFileIfPresent(commandArguments: string[], file?: string): void {
+  if (file) {
+    commandArguments.push(file);
+  }
+}
+
+/**
+ * Process the config file content and add relevant arguments to the command.
+ * @param configFilePath Path to the config file
+ * @param commandArguments The array of command arguments to modify
+ */
+function processConfigFile(configFilePath: string, commandArguments: string[]): void {
+  if (fs.existsSync(configFilePath)) {
+    const configContent = fs.readFileSync(configFilePath, 'utf8');
+    const args = configContent.split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line && !line.startsWith('#'))
+      .filter((arg) => !arg.startsWith('--template'));
+    commandArguments.push(...args);
+  } else {
+    commandArguments.push("--enable=all");
+  }
+}
+
+/**
  * Get the Cppcheck command.
  * @param file The path to a specific file to check.
  * @returns An array of strings. The 0th element is the Cppcheck command. The
@@ -84,19 +123,30 @@ export function makeCppcheckCommand(file?: string) {
   const commandArguments = [
     // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
     vscode.workspace.getConfiguration("cppcheck").get("cppcheck") as string,
-    "--enable=all",
-    '--template={|||file|||:|||{file}|||,|||line|||:{line},|||column|||:{column},|||severity|||:|||{severity}|||,|||message|||:|||{message}|||,|||id|||:|||{id}|||},',
   ];
-  // const configuration = vscode.workspace.getConfiguration("cppcheck");
-  // if (configuration.has("commandArguments")) {
-  //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  //   commandArguments = configuration.get("commandArguments")!;
-  // }
-  // commandArguments = commandArguments.filter((argument) => !argument.startsWith("--template"));
-  // commandArguments.push("--template={file}-:-{line}-:-{column}-:-{severity}-:-{id}-:-{message}");
-  if (file) {
-    commandArguments.push(file);
+
+  // Safely access workspaceFolders with optional chaining
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? '';
+
+  const configuration = vscode.workspace.getConfiguration("cppcheck");
+
+  // Use nullish coalescing operator instead of logical OR
+  const configFileName = configuration.get<string>("configFile") ?? "";
+  const configFilePath = path.isAbsolute(configFileName)
+    ? configFileName
+    : path.join(workspaceRoot, configFileName);
+
+  try {
+    processConfigFile(configFilePath, commandArguments);
+  } catch (error) {
+    // Use String() to fix template literal expression type issue
+    console.error(`Failed to read config file ${String(configFilePath)}:`, error);
+    commandArguments.push("--enable=all");
   }
+
+  addTemplateArgument(commandArguments);
+  addFileIfPresent(commandArguments, file);
+
   return commandArguments;
 }
 

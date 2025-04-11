@@ -30,3 +30,13 @@
 
 - Automatically run Cppcheck when saving a C++ file
 - Display issues as diagnostics
+
+## [0.2.0](https://github.com/Azruine/vscode-cppcheck/releases/tag/v0.2.0) - 2025 April 11
+
+### Added
+
+- .cppcheck-config added!
+
+### Removed
+
+- The `cppcheck.commandArguments` configuration setting completely removed.
