@@ -40,3 +40,9 @@
 ### Removed
 
 - The `cppcheck.commandArguments` configuration setting completely removed.
+
+## [0.2.1](https://github.com/Azruine/vscode-cppcheck/releases/tag/v0.2.1) - 2025 April 11
+
+### Added
+
+- Remove '''nofile''' information

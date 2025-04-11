@@ -3,7 +3,7 @@
   "publisher": "Azruine",
   "displayName": "Cppcheck Forked",
   "description": "Run Cppcheck on your C and C++ code.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "engines": {
     "vscode": "^1.93.0"
   },

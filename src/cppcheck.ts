@@ -210,7 +210,9 @@ function createDiagnostic(issue: Issue) {
 export function parseIssues(cppcheckJsonOutput: string) {
   try {
     const issues = JSON.parse(cppcheckJsonOutput) as Issue[];
-    const diagnostics = issues.map(createDiagnostic);
+    // Filter out "Active checkers" and similar informational messages
+    const filteredIssues = issues.filter((issue) => !(issue.file === "nofile"));
+    const diagnostics = filteredIssues.map(createDiagnostic);
     return diagnostics;
   } catch (error) {
     if (error instanceof Error) {

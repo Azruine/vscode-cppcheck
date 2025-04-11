@@ -4,7 +4,7 @@ This is an extension for Visual Studio Code to run [Cppcheck](https://github.com
 
 Forked from [here](https://github.com/brobeson/vscode-cppcheck)
 
-[![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/Azruine.vscode-cppcheck?logo=visualstudiocode&label=Latest%20Release&color=blue)](https://marketplace.visualstudio.com/items?itemName=Azruine.vscode-cppcheck)
+[![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/Azruine.vscode-cppcheck-forked?logo=visualstudiocode&label=Latest%20Release&color=blue)](https://marketplace.visualstudio.com/items?itemName=Azruine.vscode-cppcheck-forked)
 
 ## Features
 
